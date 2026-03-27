@@ -974,19 +974,19 @@ html, body {
       </div>
       <div class="team-profiles">
         <div class="profile-card">
-          <div class="profile-avatar" style="background:none;overflow:hidden;"><img src="/Users/Zlatismac/Downloads/ceo.webp" alt="AG" style="width:100%;height:100%;object-fit:cover;border-radius:50%;"></div>
+          <div class="profile-avatar" style="background:none;overflow:hidden;"><img style="font-size:20px;font-weight:700;" alt="AG" style="width:100%;height:100%;object-fit:cover;border-radius:50%;"></div>
           <div class="profile-name">Alex Guti&eacute;rrez</div>
           <div class="profile-role">CEO</div>
           <div class="profile-creds">Master of BI &middot; &euro;3M+ генерирани приходи чрез неговите системи &middot; Exit на агенция с &euro;1M годишен оборот</div>
         </div>
         <div class="profile-card">
-          <div class="profile-avatar" style="background:none;overflow:hidden;"><img src="/Users/Zlatismac/Downloads/cto.webp" alt="AS" style="width:100%;height:100%;object-fit:cover;border-radius:50%;"></div>
+          <div class="profile-avatar" style="background:none;overflow:hidden;"><img style="font-size:20px;font-weight:700;" alt="AS" style="width:100%;height:100%;object-fit:cover;border-radius:50%;"></div>
           <div class="profile-name">Alejandro Silvestre</div>
           <div class="profile-role">CTO</div>
           <div class="profile-creds">Cybersecurity & Systems Architecture</div>
         </div>
         <div class="profile-card">
-          <div class="profile-avatar" style="background:none;overflow:hidden;"><img src="/Users/Zlatismac/Downloads/bd.webp" alt="ЗВ" style="width:100%;height:100%;object-fit:cover;border-radius:50%;"></div>
+          <div class="profile-avatar" style="background:none;overflow:hidden;"><img style="font-size:20px;font-weight:700;" alt="ЗВ" style="width:100%;height:100%;object-fit:cover;border-radius:50%;"></div>
           <div class="profile-name">Златина Вълчева</div>
           <div class="profile-role">HEAD OF BD</div>
           <div class="profile-creds">Ex-Festo, Ex-Bitmovin &middot; Университети — Виена & Хонг Конг</div>
@@ -1352,7 +1352,7 @@ html, body {
   document.addEventListener('touchend', function(e) {
     const dy = e.changedTouches[0].screenY - touchStartY;
     const dx = e.changedTouches[0].screenX - touchStartX;
-    if (Math.max(Math.abs(dx), Math.abs(dy)) < 40) return;
+    if (Math.max(Math.abs(dx), Math.abs(dy)) < 100) return;
     if (Math.abs(dx) > Math.abs(dy)) { dx < 0 ? goNext() : goPrev(); }
     else { dy < 0 ? goNext() : goPrev(); }
   }, { passive: true });
