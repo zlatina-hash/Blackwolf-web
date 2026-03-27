@@ -570,7 +570,8 @@ html, body {
 .cta-logo {
   width: 44px; height: auto; opacity: 0; filter: drop-shadow(0 0 20px rgba(37, 99, 235, 0.3));
 }
-.slide.active .cta-logo { animation: revealUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.85s forwards; }
+.slide.active .cta-qr { animation: revealUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.75s forwards; }
+.slide.active .cta-logo { animation: revealUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.9s forwards; }
 
 /* ── SCROLLABLE SLIDE CONTENT ── */
 .slide-inner.scrollable { max-height: calc(100vh - 30px) !important;
@@ -1235,6 +1236,10 @@ html, body {
         </div>
       </div>
       <p class="cta-tagline">BLACKWOLF &middot; Иновация, която защитава. Съвършенство, което дава сила.</p>
+      <div class="cta-qr" style="opacity:0;transform:translateY(15px);margin-bottom:24px;">
+        <img src="qr-calendly.png" alt="Calendly QR Code" style="width:160px;height:160px;border-radius:12px;background:#fff;padding:8px;">
+        <p style="font-size:12px;color:var(--gray);margin-top:8px;letter-spacing:0.5px;">Сканирайте за среща в Calendly</p>
+      </div>
       <img src="Logo.png" alt="BlackWolf" class="cta-logo">
       <div class="cover-trust-bar" style="margin-top: 40px;">
         <div class="trust-bar-label">Trusted by</div>
