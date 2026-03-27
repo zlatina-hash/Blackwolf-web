@@ -604,8 +604,11 @@ html, body {
   .timeline-week { font-size: 9px !important; margin-bottom: 4px !important; }
   .timeline-title { font-size: 13px !important; margin: 2px 0 !important; }
   .timeline-desc { font-size: 11px !important; line-height: 1.4 !important; }
-  .slide { padding: 16px 16px 80px 16px; }
-  .slide-inner.scrollable { max-height: calc(100vh - 100px) !important; padding-bottom: 20px; }
+  .slide { padding: 16px 16px 100px 16px; }
+  .slide-inner { max-height: calc(100vh - 120px) !important; overflow-y: auto !important; padding-bottom: 30px; scrollbar-width: thin; scrollbar-color: rgba(37, 99, 235, 0.2) transparent; }
+  .slide-inner::-webkit-scrollbar { width: 4px; }
+  .slide-inner::-webkit-scrollbar-track { background: transparent; }
+  .slide-inner::-webkit-scrollbar-thumb { background: rgba(37, 99, 235, 0.2); border-radius: 4px; }
   .why-grid { grid-template-columns: 1fr; }
   .team-profiles { grid-template-columns: 1fr; }
   .team-points { grid-template-columns: 1fr; }
