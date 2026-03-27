@@ -604,20 +604,18 @@ html, body {
   .timeline-week { font-size: 9px !important; margin-bottom: 4px !important; }
   .timeline-title { font-size: 13px !important; margin: 2px 0 !important; }
   .timeline-desc { font-size: 11px !important; line-height: 1.4 !important; }
-  .timeline { flex-direction: column !important; gap: 16px !important; padding-left: 20px !important; flex-wrap: nowrap !important; }
-  .timeline-item { flex: none !important; text-align: left !important; padding: 0 0 0 20px !important; }
-  .timeline-dot { margin: 0 0 8px 0 !important; }
-  .timeline::before { display: none !important; }
-  .slide { padding: 24px; }
+  .slide { padding: 16px 16px 80px 16px; }
+  .slide-inner.scrollable { max-height: calc(100vh - 100px) !important; padding-bottom: 20px; }
   .why-grid { grid-template-columns: 1fr; }
   .team-profiles { grid-template-columns: 1fr; }
   .team-points { grid-template-columns: 1fr; }
-  .timeline-item { flex: 0 0 50%; }
-  .nav-arrows { bottom: 20px; }
-  .slide-counter { bottom: 20px; right: 20px; }
+  .nav-arrows { bottom: 16px; }
+  .slide-counter { bottom: 18px; right: 16px; }
   .cta-contacts { flex-direction: column; gap: 16px; }
   .kb-hint { display: none; }
   .ba-table td, .ba-table th { padding: 10px 12px; font-size: 12px; }
+  .pain-grid { gap: 20px; }
+  .cost-value { min-width: auto; }
 }
 
 /* ── CURSOR GLOW ── */
