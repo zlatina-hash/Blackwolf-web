@@ -573,7 +573,7 @@ html, body {
 .slide.active .cta-logo { animation: revealUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.85s forwards; }
 
 /* ── SCROLLABLE SLIDE CONTENT ── */
-.slide-inner.scrollable {
+.slide-inner.scrollable { max-height: calc(100vh - 40px) !important;
   max-height: calc(100vh - 60px);
   overflow-y: auto;
   scrollbar-width: thin;
