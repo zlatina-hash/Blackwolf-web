@@ -604,16 +604,18 @@ html, body {
   .timeline-week { font-size: 9px !important; margin-bottom: 4px !important; }
   .timeline-title { font-size: 13px !important; margin: 2px 0 !important; }
   .timeline-desc { font-size: 11px !important; line-height: 1.4 !important; }
-  .slide { padding: 20px 16px 90px 16px; align-items: flex-start !important; }
-  .slide-inner { max-height: calc(100vh - 110px) !important; overflow-y: auto !important; padding-bottom: 20px; scrollbar-width: thin; scrollbar-color: rgba(37, 99, 235, 0.2) transparent; }
+  .slide { padding: 15px 16px 0 16px; align-items: flex-start !important; }
+  .slide-inner { max-height: calc(100vh - 80px) !important; overflow-y: auto !important; padding-bottom: 80px !important; scrollbar-width: thin; scrollbar-color: rgba(37, 99, 235, 0.2) transparent; }
   .slide-inner::-webkit-scrollbar { width: 4px; }
   .slide-inner::-webkit-scrollbar-track { background: transparent; }
   .slide-inner::-webkit-scrollbar-thumb { background: rgba(37, 99, 235, 0.2); border-radius: 4px; }
+  .cover-content { min-height: auto !important; padding-bottom: 80px; }
+  .cta-content { min-height: auto !important; padding-bottom: 80px; }
   .why-grid { grid-template-columns: 1fr; }
   .team-profiles { grid-template-columns: 1fr; }
   .team-points { grid-template-columns: 1fr; }
-  .nav-arrows { bottom: 16px; }
-  .slide-counter { bottom: 18px; right: 16px; }
+  .nav-arrows { bottom: 12px; }
+  .slide-counter { bottom: 14px; right: 16px; }
   .cta-contacts { flex-direction: column; gap: 16px; }
   .kb-hint { display: none; }
   .ba-table td, .ba-table th { padding: 10px 12px; font-size: 12px; }
