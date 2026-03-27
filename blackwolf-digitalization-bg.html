@@ -1,0 +1,1384 @@
+<!DOCTYPE html>
+<html lang="bg">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BlackWolf — Програма за Дигитализация България 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --bg: #050510;
+  --bg-card: rgba(12, 12, 30, 0.75);
+  --bg-card-hover: rgba(20, 20, 50, 0.85);
+  --blue-700: #1D4ED8;
+  --blue-600: #2563EB;
+  --blue-500: #3B82F6;
+  --blue-400: #60A5FA;
+  --blue-300: #93C5FD;
+  --red-500: #EF4444;
+  --red-400: #F87171;
+  --green-500: #22C55E;
+  --green-400: #4ADE80;
+  --amber-500: #F59E0B;
+  --purple-500: #8B5CF6;
+  --white: #F1F5F9;
+  --gray: #94A3B8;
+  --gray-dark: #334155;
+  --gray-darker: #1E293B;
+  --glow: 0 0 40px rgba(37, 99, 235, 0.3);
+  --glow-sm: 0 0 20px rgba(37, 99, 235, 0.15);
+  --glow-red: 0 0 30px rgba(239, 68, 68, 0.2);
+}
+
+html, body {
+  font-family: 'Inter', -apple-system, sans-serif;
+  background: var(--bg);
+  color: var(--white);
+  overflow: hidden;
+  height: 100%;
+  width: 100%;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── BACKGROUND ── */
+.bg-grid {
+  position: fixed; inset: 0;
+  background-image:
+    linear-gradient(rgba(37, 99, 235, 0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(37, 99, 235, 0.025) 1px, transparent 1px);
+  background-size: 60px 60px;
+  z-index: 0; pointer-events: none;
+}
+
+.bg-nebula { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+.nebula-orb {
+  position: absolute; border-radius: 50%; filter: blur(130px); opacity: 0.10;
+  animation: nebulaFloat 20s ease-in-out infinite;
+}
+.nebula-orb:nth-child(1) { width: 600px; height: 600px; background: var(--blue-600); top: -200px; left: -100px; }
+.nebula-orb:nth-child(2) { width: 500px; height: 500px; background: var(--blue-400); bottom: -200px; right: -100px; animation-delay: -7s; animation-duration: 25s; }
+.nebula-orb:nth-child(3) { width: 400px; height: 400px; background: var(--purple-500); top: 50%; left: 50%; transform: translate(-50%, -50%); animation-delay: -14s; animation-duration: 30s; opacity: 0.05; }
+
+@keyframes nebulaFloat {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  25% { transform: translate(40px, -30px) scale(1.05); }
+  50% { transform: translate(-20px, 40px) scale(0.95); }
+  75% { transform: translate(30px, 20px) scale(1.03); }
+}
+
+/* ── FLOATING PARTICLES ── */
+.particles { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+.particle {
+  position: absolute; width: 2px; height: 2px; background: var(--blue-400); border-radius: 50%;
+  opacity: 0; animation: particleFloat linear infinite;
+}
+@keyframes particleFloat {
+  0% { opacity: 0; transform: translateY(100vh) scale(0); }
+  10% { opacity: 0.6; }
+  90% { opacity: 0.6; }
+  100% { opacity: 0; transform: translateY(-10vh) scale(1); }
+}
+
+/* ── PROGRESS BAR ── */
+.progress-bar {
+  position: fixed; top: 0; left: 0; height: 3px;
+  background: linear-gradient(90deg, var(--blue-600), var(--blue-400), var(--purple-500));
+  z-index: 1000;
+  transition: width 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 0 15px rgba(37, 99, 235, 0.5);
+}
+
+/* ── SLIDE COUNTER ── */
+.slide-counter {
+  position: fixed; bottom: 40px; right: 40px; z-index: 1000;
+  font-size: 14px; font-weight: 500; letter-spacing: 2px; color: var(--gray);
+  font-variant-numeric: tabular-nums;
+}
+.slide-counter .current { color: var(--blue-400); font-weight: 700; font-size: 18px; }
+
+/* ── NAV ── */
+.nav-arrows {
+  position: fixed; bottom: 40px; left: 50%; transform: translateX(-50%);
+  display: flex; gap: 12px; z-index: 1000;
+}
+.nav-btn {
+  width: 44px; height: 44px;
+  border: 1px solid rgba(37, 99, 235, 0.3); border-radius: 50%;
+  background: rgba(5, 5, 16, 0.8); color: var(--blue-400);
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+  transition: all 0.3s ease; backdrop-filter: blur(10px);
+}
+.nav-btn:hover { background: rgba(37, 99, 235, 0.15); border-color: var(--blue-500); box-shadow: var(--glow-sm); }
+.nav-btn svg { width: 18px; height: 18px; }
+
+/* ── KEYBOARD HINT ── */
+.kb-hint {
+  position: fixed; bottom: 44px; left: 40px; z-index: 1000;
+  font-size: 11px; color: rgba(148, 163, 184, 0.4); letter-spacing: 1px;
+}
+.kb-hint kbd {
+  display: inline-block; padding: 2px 6px; border: 1px solid rgba(148, 163, 184, 0.15);
+  border-radius: 4px; font-family: inherit; font-size: 10px; margin: 0 2px;
+}
+
+/* ── SLIDES ── */
+.slides-container { position: relative; width: 100vw; height: 100vh; }
+.slide {
+  position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+  padding: 60px 80px; opacity: 0; visibility: hidden;
+  transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+  transform: translateY(30px); z-index: 1;
+}
+.slide.active { opacity: 1; visibility: visible; transform: translateY(0); z-index: 2; }
+.slide.exit-up { opacity: 0; transform: translateY(-30px); }
+.slide-inner { width: 100%; max-width: 1200px; margin: 0 auto; }
+
+/* ── TYPOGRAPHY ── */
+.slide-label {
+  font-size: 11px; font-weight: 600; letter-spacing: 4px; text-transform: uppercase;
+  color: var(--blue-400); margin-bottom: 16px; opacity: 0; transform: translateY(15px);
+}
+.slide-title {
+  font-size: clamp(28px, 4.5vw, 48px); font-weight: 800; line-height: 1.15;
+  margin-bottom: 28px; opacity: 0; transform: translateY(20px);
+}
+.slide-title .accent {
+  background: linear-gradient(135deg, var(--blue-400), var(--blue-300));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+}
+.slide-title .accent-red {
+  background: linear-gradient(135deg, var(--red-400), var(--amber-500));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+}
+.slide-subtitle {
+  font-size: clamp(14px, 1.8vw, 18px); color: var(--gray); font-weight: 400;
+  line-height: 1.6; max-width: 700px; opacity: 0; transform: translateY(20px);
+}
+
+/* ── REVEAL ANIMATIONS ── */
+.slide.active .reveal { animation: revealUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+.slide.active .reveal:nth-child(1) { animation-delay: 0.1s; }
+.slide.active .reveal:nth-child(2) { animation-delay: 0.2s; }
+.slide.active .reveal:nth-child(3) { animation-delay: 0.3s; }
+.slide.active .reveal:nth-child(4) { animation-delay: 0.4s; }
+.slide.active .reveal:nth-child(5) { animation-delay: 0.5s; }
+.slide.active .reveal:nth-child(6) { animation-delay: 0.6s; }
+.slide.active .reveal:nth-child(7) { animation-delay: 0.7s; }
+.slide.active .reveal:nth-child(8) { animation-delay: 0.8s; }
+@keyframes revealUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes revealLeft { from { opacity: 0; transform: translateX(-20px); } to { opacity: 1; transform: translateX(0); } }
+@keyframes revealRight { from { opacity: 0; transform: translateX(20px); } to { opacity: 1; transform: translateX(0); } }
+@keyframes revealScale { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+/* ── TRUST BAR ── */
+.trust-bar {
+  margin-top: auto; padding-top: 24px;
+  border-top: 1px solid rgba(37, 99, 235, 0.06);
+  opacity: 0; transform: translateY(10px);
+}
+.slide.active .trust-bar { animation: revealUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards; animation-delay: 1s; }
+.trust-bar-label {
+  font-size: 10px; font-weight: 600; letter-spacing: 3px; text-transform: uppercase;
+  color: rgba(148, 163, 184, 0.3); margin-bottom: 12px;
+}
+.trust-bar-logos {
+  display: flex; align-items: center; gap: 28px; flex-wrap: wrap;
+}
+.trust-bar-logos span {
+  font-size: 12px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase;
+  color: rgba(148, 163, 184, 0.25); transition: color 0.3s;
+  white-space: nowrap;
+}
+.trust-bar-logos span:hover { color: rgba(148, 163, 184, 0.5); }
+
+/* ── TRUST SIGNAL QUOTE ── */
+.trust-signal {
+  margin-top: 24px; padding: 16px 20px;
+  background: rgba(37, 99, 235, 0.03);
+  border-left: 2px solid rgba(37, 99, 235, 0.2);
+  border-radius: 0 8px 8px 0;
+  font-size: 13px; font-style: italic; color: rgba(148, 163, 184, 0.7);
+  line-height: 1.6; opacity: 0; transform: translateY(10px);
+}
+.trust-signal.trust-signal--external {
+  border-left-color: rgba(139, 92, 246, 0.3);
+  background: rgba(139, 92, 246, 0.03);
+}
+.slide.active .trust-signal { animation: revealUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+
+/* ── COVER SLIDE ── */
+.cover-content { text-align: center; display: flex; flex-direction: column; align-items: center; min-height: calc(100vh - 120px); justify-content: center; }
+.cover-logo {
+  width: 72px; height: auto; margin-bottom: 20px; opacity: 0; transform: scale(0.8);
+  filter: drop-shadow(0 0 30px rgba(37, 99, 235, 0.4));
+}
+.slide.active .cover-logo { animation: logoReveal 1s cubic-bezier(0.16, 1, 0.3, 1) 0.1s forwards; }
+@keyframes logoReveal { to { opacity: 1; transform: scale(1); } }
+
+.cover-brand {
+  font-size: 14px; font-weight: 700; letter-spacing: 12px; text-transform: uppercase;
+  color: var(--blue-400); margin-bottom: 40px; opacity: 0; transform: translateY(10px);
+}
+.slide.active .cover-brand { animation: revealUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.3s forwards; }
+
+.cover-title {
+  font-size: clamp(28px, 4.5vw, 52px); font-weight: 800; line-height: 1.15;
+  margin-bottom: 24px; max-width: 800px; opacity: 0; transform: translateY(20px);
+}
+.slide.active .cover-title { animation: revealUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.5s forwards; }
+
+.cover-sub {
+  font-size: clamp(13px, 1.6vw, 16px); color: var(--gray); font-weight: 400;
+  letter-spacing: 0.5px; line-height: 1.7; max-width: 600px;
+  opacity: 0; transform: translateY(15px);
+}
+.slide.active .cover-sub { animation: revealUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.7s forwards; }
+
+.cover-glow-ring {
+  position: absolute; width: 500px; height: 500px; border-radius: 50%;
+  border: 1px solid rgba(37, 99, 235, 0.08); top: 50%; left: 50%;
+  transform: translate(-50%, -50%); animation: glowPulse 4s ease-in-out infinite;
+  pointer-events: none;
+}
+.cover-glow-ring:nth-of-type(2) { width: 700px; height: 700px; animation-delay: -1.5s; border-color: rgba(37, 99, 235, 0.04); }
+.cover-glow-ring:nth-of-type(3) { width: 900px; height: 900px; animation-delay: -3s; border-color: rgba(37, 99, 235, 0.02); }
+@keyframes glowPulse {
+  0%, 100% { opacity: 0.3; transform: translate(-50%, -50%) scale(1); }
+  50% { opacity: 0.7; transform: translate(-50%, -50%) scale(1.04); }
+}
+
+/* ── COVER TRUST BAR ── */
+.cover-trust-bar {
+  margin-top: 60px; opacity: 0; transform: translateY(10px);
+}
+.slide.active .cover-trust-bar { animation: revealUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) 1s forwards; }
+
+/* ── PAIN SLIDE (SLIDE 2) ── */
+.pain-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; margin-top: 24px; }
+.pain-col-title {
+  font-size: 12px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase;
+  margin-bottom: 16px; padding-bottom: 10px; border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+.pain-col-title.pain-col-title--left { color: var(--red-400); }
+.pain-col-title.pain-col-title--right { color: var(--amber-500); }
+
+.pain-item {
+  display: flex; align-items: flex-start; gap: 12px; padding: 12px 16px;
+  background: var(--bg-card); border: 1px solid rgba(239, 68, 68, 0.06);
+  border-radius: 10px; font-size: 13px; color: var(--gray); line-height: 1.55;
+  opacity: 0; transform: translateX(-15px); backdrop-filter: blur(10px);
+  transition: border-color 0.3s, box-shadow 0.3s; margin-bottom: 8px;
+}
+.pain-item:hover { border-color: rgba(239, 68, 68, 0.15); box-shadow: var(--glow-red); }
+.slide.active .pain-item { animation: revealLeft 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+.slide.active .pain-item:nth-child(2) { animation-delay: 0.35s; }
+.slide.active .pain-item:nth-child(3) { animation-delay: 0.45s; }
+.slide.active .pain-item:nth-child(4) { animation-delay: 0.55s; }
+.slide.active .pain-item:nth-child(5) { animation-delay: 0.65s; }
+.slide.active .pain-item:nth-child(6) { animation-delay: 0.75s; }
+
+.pain-icon { flex-shrink: 0; margin-top: 2px; width: 16px; height: 16px; color: var(--red-400); opacity: 0.7; }
+
+.cost-item {
+  display: flex; align-items: flex-start; gap: 12px; padding: 14px 16px;
+  background: var(--bg-card); border: 1px solid rgba(245, 158, 11, 0.06);
+  border-radius: 10px; opacity: 0; transform: translateX(15px);
+  backdrop-filter: blur(10px); transition: border-color 0.3s, box-shadow 0.3s; margin-bottom: 8px;
+}
+.cost-item:hover { border-color: rgba(245, 158, 11, 0.15); box-shadow: 0 0 20px rgba(245, 158, 11, 0.1); }
+.slide.active .cost-item { animation: revealRight 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+.slide.active .cost-item:nth-child(2) { animation-delay: 0.4s; }
+.slide.active .cost-item:nth-child(3) { animation-delay: 0.5s; }
+.slide.active .cost-item:nth-child(4) { animation-delay: 0.6s; }
+.slide.active .cost-item:nth-child(5) { animation-delay: 0.7s; }
+.slide.active .cost-item:nth-child(6) { animation-delay: 0.8s; }
+
+.cost-value {
+  font-size: 13px; font-weight: 800; color: var(--amber-500); white-space: nowrap;
+  min-width: 120px; flex-shrink: 0;
+}
+.cost-desc { font-size: 13px; color: var(--gray); line-height: 1.5; }
+
+/* ── QUESTION SLIDE (SLIDE 3) ── */
+.question-body {
+  margin-top: 20px; max-width: 800px;
+}
+.question-text {
+  font-size: 15px; color: var(--gray); line-height: 1.75; margin-bottom: 16px;
+  opacity: 0; transform: translateY(15px);
+}
+.slide.active .question-text { animation: revealUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+.slide.active .question-text:nth-child(1) { animation-delay: 0.3s; }
+.slide.active .question-text:nth-child(2) { animation-delay: 0.5s; }
+.slide.active .question-text:nth-child(3) { animation-delay: 0.7s; }
+.question-highlight {
+  font-size: 16px; font-weight: 600; color: var(--white); padding: 20px 24px;
+  background: linear-gradient(135deg, rgba(239, 68, 68, 0.08), rgba(245, 158, 11, 0.04));
+  border: 1px solid rgba(239, 68, 68, 0.12); border-radius: 12px;
+  margin: 24px 0; opacity: 0; transform: translateY(15px);
+}
+.slide.active .question-highlight { animation: revealUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.85s forwards; }
+
+/* ── SOLUTION SLIDE (SLIDE 4) — BEFORE/AFTER ── */
+.ba-table { width: 100%; margin-top: 20px; border-collapse: separate; border-spacing: 0 6px; }
+.ba-table th {
+  font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase;
+  padding: 12px 16px; text-align: left;
+}
+.ba-table th:first-child { color: var(--red-400); }
+.ba-table th:last-child { color: var(--green-400); }
+.ba-table td {
+  padding: 14px 16px; font-size: 13px; line-height: 1.5; vertical-align: top;
+}
+.ba-row {
+  opacity: 0; transform: translateY(10px);
+}
+.ba-row td:first-child {
+  background: rgba(239, 68, 68, 0.04); color: var(--gray);
+  border-radius: 10px 0 0 10px; border: 1px solid rgba(239, 68, 68, 0.06);
+  border-right: none; width: 48%;
+}
+.ba-row td.ba-arrow {
+  background: transparent; width: 4%; text-align: center; padding: 14px 4px;
+  color: var(--blue-400); font-size: 16px; border: none;
+}
+.ba-row td:last-child {
+  background: rgba(34, 197, 94, 0.04); color: var(--white);
+  border-radius: 0 10px 10px 0; border: 1px solid rgba(34, 197, 94, 0.08);
+  border-left: none; width: 48%; font-weight: 500;
+}
+.slide.active .ba-row { animation: revealUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+.slide.active .ba-row:nth-child(2) { animation-delay: 0.3s; }
+.slide.active .ba-row:nth-child(3) { animation-delay: 0.4s; }
+.slide.active .ba-row:nth-child(4) { animation-delay: 0.5s; }
+.slide.active .ba-row:nth-child(5) { animation-delay: 0.6s; }
+.slide.active .ba-row:nth-child(6) { animation-delay: 0.7s; }
+.slide.active .ba-row:nth-child(7) { animation-delay: 0.8s; }
+
+/* ── TEAM SLIDE ── */
+.team-top { margin-bottom: 36px; }
+.team-points { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px 28px; margin-top: 16px; }
+.team-point {
+  display: flex; align-items: flex-start; gap: 10px; font-size: 13px; color: var(--gray);
+  line-height: 1.55; opacity: 0; transform: translateY(10px);
+}
+.slide.active .team-point { animation: revealUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+.slide.active .team-point:nth-child(1) { animation-delay: 0.3s; }
+.slide.active .team-point:nth-child(2) { animation-delay: 0.4s; }
+.slide.active .team-point:nth-child(3) { animation-delay: 0.5s; }
+.slide.active .team-point:nth-child(4) { animation-delay: 0.6s; }
+.team-point-dot { width: 5px; height: 5px; background: var(--blue-500); border-radius: 50%; flex-shrink: 0; margin-top: 6px; }
+
+.team-profiles { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+.profile-card {
+  padding: 28px 20px; background: var(--bg-card); border: 1px solid rgba(37, 99, 235, 0.08);
+  border-radius: 16px; text-align: center; opacity: 0; transform: translateY(25px);
+  backdrop-filter: blur(10px); transition: border-color 0.3s, box-shadow 0.3s, transform 0.3s;
+}
+.profile-card:hover { border-color: rgba(37, 99, 235, 0.25); box-shadow: var(--glow); transform: translateY(-4px) !important; }
+.slide.active .profile-card { animation: revealUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+.slide.active .profile-card:nth-child(1) { animation-delay: 0.5s; }
+.slide.active .profile-card:nth-child(2) { animation-delay: 0.65s; }
+.slide.active .profile-card:nth-child(3) { animation-delay: 0.8s; }
+
+.profile-avatar {
+  width: 56px; height: 56px; border-radius: 50%; margin: 0 auto 14px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px; font-weight: 700;
+  background: linear-gradient(135deg, var(--blue-600), var(--blue-400)); color: white;
+}
+.profile-name { font-size: 16px; font-weight: 700; margin-bottom: 4px; }
+.profile-role { font-size: 11px; color: var(--blue-400); font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 10px; }
+.profile-creds { font-size: 12px; color: var(--gray); line-height: 1.5; }
+
+/* ── TIMELINE ── */
+.timeline { position: relative; display: flex; gap: 0; margin-top: 16px; }
+.timeline::before {
+  content: ''; position: absolute; top: 32px; left: 40px; right: 40px; height: 2px;
+  background: linear-gradient(90deg, var(--blue-600), var(--blue-400), var(--blue-600)); opacity: 0;
+}
+.slide.active .timeline::before { animation: lineGrow 1s cubic-bezier(0.16, 1, 0.3, 1) 0.3s forwards; }
+@keyframes lineGrow { from { opacity: 0; transform: scaleX(0); } to { opacity: 1; transform: scaleX(1); } }
+
+.timeline-item {
+  flex: 1; text-align: center; position: relative; padding: 0 6px;
+  opacity: 0; transform: translateY(20px);
+}
+.slide.active .timeline-item { animation: revealUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+.slide.active .timeline-item:nth-child(1) { animation-delay: 0.4s; }
+.slide.active .timeline-item:nth-child(2) { animation-delay: 0.55s; }
+.slide.active .timeline-item:nth-child(3) { animation-delay: 0.7s; }
+.slide.active .timeline-item:nth-child(4) { animation-delay: 0.85s; }
+.slide.active .timeline-item:nth-child(5) { animation-delay: 1.0s; }
+
+.timeline-dot {
+  width: 14px; height: 14px; border-radius: 50%; background: var(--blue-500);
+  margin: 24px auto 18px; position: relative; box-shadow: 0 0 20px rgba(37, 99, 235, 0.4);
+}
+.timeline-dot::after {
+  content: ''; position: absolute; inset: -4px; border-radius: 50%;
+  border: 2px solid rgba(37, 99, 235, 0.3); animation: dotPulse 2s ease-in-out infinite;
+}
+@keyframes dotPulse { 0%, 100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.5); opacity: 0; } }
+
+.timeline-week { font-size: 11px; font-weight: 700; letter-spacing: 2px; color: var(--blue-400); text-transform: uppercase; }
+.timeline-title { font-size: 14px; font-weight: 700; margin: 6px 0 4px; }
+.timeline-desc { font-size: 12px; color: var(--gray); line-height: 1.5; }
+
+/* ── RESULTS SLIDE ── */
+.results-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px; }
+.result-card {
+  padding: 24px; background: var(--bg-card); border: 1px solid rgba(37, 99, 235, 0.08);
+  border-radius: 16px; opacity: 0; transform: translateY(20px);
+  backdrop-filter: blur(10px); transition: border-color 0.3s, box-shadow 0.3s;
+}
+.result-card:hover { border-color: rgba(37, 99, 235, 0.25); box-shadow: var(--glow); }
+.slide.active .result-card { animation: revealUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+.slide.active .result-card:nth-child(1) { animation-delay: 0.3s; }
+.slide.active .result-card:nth-child(2) { animation-delay: 0.45s; }
+
+.result-card-title { font-size: 14px; font-weight: 700; color: var(--blue-400); margin-bottom: 2px; letter-spacing: 1px; }
+.result-card-company { font-size: 12px; color: var(--gray); margin-bottom: 10px; }
+.result-before { font-size: 12px; color: rgba(148,163,184,0.5); line-height: 1.5; margin-bottom: 8px; font-style: italic; }
+.result-what { font-size: 12px; color: var(--gray); line-height: 1.5; margin-bottom: 14px; }
+.result-metrics { display: flex; gap: 16px; }
+.result-metric { flex: 1; }
+.result-metric-value { font-size: 24px; font-weight: 800; color: var(--white); line-height: 1; margin-bottom: 4px; }
+.result-metric-label { font-size: 11px; color: var(--gray); line-height: 1.4; }
+
+.big-stat-banner {
+  padding: 20px 24px;
+  background: linear-gradient(135deg, rgba(37, 99, 235, 0.08), rgba(37, 99, 235, 0.02));
+  border: 1px solid rgba(37, 99, 235, 0.12); border-radius: 14px; text-align: center;
+  opacity: 0; transform: translateY(20px);
+}
+.slide.active .big-stat-banner { animation: revealUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.7s forwards; }
+.big-stat-text { font-size: clamp(16px, 2.5vw, 22px); font-weight: 700; }
+.big-stat-text .accent {
+  background: linear-gradient(135deg, var(--blue-400), var(--blue-300));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+}
+
+/* ── COMPLIANCE / PROGRAM SLIDE ── */
+.compliance-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
+.compliance-item {
+  display: flex; align-items: center; gap: 12px; padding: 14px 16px;
+  background: var(--bg-card); border: 1px solid rgba(37, 99, 235, 0.08);
+  border-radius: 10px; font-size: 13px; color: var(--white);
+  opacity: 0; transform: translateY(12px); backdrop-filter: blur(10px);
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+.compliance-item:hover { border-color: rgba(37, 99, 235, 0.2); box-shadow: var(--glow-sm); }
+.slide.active .compliance-item { animation: revealUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+.slide.active .compliance-item:nth-child(1) { animation-delay: 0.2s; }
+.slide.active .compliance-item:nth-child(2) { animation-delay: 0.28s; }
+.slide.active .compliance-item:nth-child(3) { animation-delay: 0.36s; }
+.slide.active .compliance-item:nth-child(4) { animation-delay: 0.44s; }
+.slide.active .compliance-item:nth-child(5) { animation-delay: 0.52s; }
+.slide.active .compliance-item:nth-child(6) { animation-delay: 0.60s; }
+.slide.active .compliance-item:nth-child(7) { animation-delay: 0.68s; }
+.slide.active .compliance-item:nth-child(8) { animation-delay: 0.76s; }
+
+.compliance-amount { font-size: 12px; color: var(--blue-400); font-weight: 600; white-space: nowrap; margin-left: auto; }
+
+.check-icon {
+  width: 24px; height: 24px; border-radius: 6px;
+  background: linear-gradient(135deg, rgba(34, 197, 94, 0.15), rgba(34, 197, 94, 0.05));
+  border: 1px solid rgba(34, 197, 94, 0.2);
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0; color: #22C55E;
+}
+.check-icon svg { width: 14px; height: 14px; }
+
+.compliance-footer {
+  padding: 18px 24px; background: linear-gradient(135deg, rgba(37, 99, 235, 0.06), rgba(37, 99, 235, 0.02));
+  border: 1px solid rgba(37, 99, 235, 0.1); border-radius: 12px;
+  font-size: 14px; font-weight: 500; color: var(--gray); line-height: 1.6;
+  opacity: 0; transform: translateY(15px);
+}
+.compliance-footer strong { color: var(--blue-300); font-weight: 600; }
+.slide.active .compliance-footer { animation: revealUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.9s forwards; }
+
+/* ── WHY BLACKWOLF ── */
+.why-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-top: 12px; }
+.why-card {
+  padding: 28px 20px; background: var(--bg-card); border: 1px solid rgba(37, 99, 235, 0.08);
+  border-radius: 16px; text-align: center; opacity: 0; transform: translateY(25px);
+  backdrop-filter: blur(10px); transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.why-card:hover { border-color: rgba(37, 99, 235, 0.3); box-shadow: var(--glow); transform: translateY(-6px) !important; }
+.slide.active .why-card { animation: revealUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+.slide.active .why-card:nth-child(1) { animation-delay: 0.3s; }
+.slide.active .why-card:nth-child(2) { animation-delay: 0.45s; }
+.slide.active .why-card:nth-child(3) { animation-delay: 0.6s; }
+.slide.active .why-card:nth-child(4) { animation-delay: 0.75s; }
+
+.why-icon {
+  width: 52px; height: 52px; margin: 0 auto 16px; border-radius: 14px;
+  display: flex; align-items: center; justify-content: center;
+  background: linear-gradient(135deg, rgba(37, 99, 235, 0.15), rgba(37, 99, 235, 0.05));
+  border: 1px solid rgba(37, 99, 235, 0.15);
+}
+.why-icon svg { width: 26px; height: 26px; color: var(--blue-400); }
+.why-title { font-size: 15px; font-weight: 700; margin-bottom: 8px; line-height: 1.3; }
+.why-desc { font-size: 12px; color: var(--gray); line-height: 1.55; }
+
+/* ── WHY SCOREBOARD ── */
+.why-scoreboard {
+  margin-top: 20px; padding: 18px 24px;
+  background: linear-gradient(135deg, rgba(37, 99, 235, 0.06), rgba(139, 92, 246, 0.04));
+  border: 1px solid rgba(37, 99, 235, 0.1); border-radius: 12px;
+  display: flex; justify-content: center; gap: 40px; flex-wrap: wrap;
+  opacity: 0; transform: translateY(15px);
+}
+.slide.active .why-scoreboard { animation: revealUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) 1s forwards; }
+.scoreboard-item { text-align: center; }
+.scoreboard-value { font-size: 16px; font-weight: 800; color: var(--blue-400); }
+.scoreboard-label { font-size: 11px; color: var(--gray); margin-top: 2px; }
+
+/* ── CTA SLIDE ── */
+.cta-content { text-align: center; display: flex; flex-direction: column; align-items: center; min-height: calc(100vh - 120px); justify-content: center; }
+.cta-title {
+  font-size: clamp(28px, 4.5vw, 52px); font-weight: 800; margin-bottom: 16px;
+  background: linear-gradient(135deg, var(--white), var(--blue-300));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  opacity: 0; transform: translateY(20px);
+}
+.slide.active .cta-title { animation: revealUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.2s forwards; }
+.cta-sub {
+  font-size: 15px; color: var(--gray); margin-bottom: 36px; max-width: 550px; line-height: 1.7;
+  opacity: 0; transform: translateY(15px);
+}
+.slide.active .cta-sub { animation: revealUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.4s forwards; }
+.cta-contacts {
+  display: flex; gap: 32px; margin-bottom: 36px; opacity: 0; transform: translateY(15px);
+}
+.slide.active .cta-contacts { animation: revealUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.55s forwards; }
+.cta-contact-item {
+  display: flex; align-items: center; gap: 10px; font-size: 15px; color: var(--blue-300); font-weight: 500;
+}
+.cta-contact-item svg { width: 18px; height: 18px; color: var(--blue-400); }
+.cta-tagline {
+  font-size: 14px; color: rgba(148, 163, 184, 0.5); max-width: 500px; line-height: 1.6;
+  margin-bottom: 36px; letter-spacing: 0.5px; opacity: 0; transform: translateY(15px);
+}
+.slide.active .cta-tagline { animation: revealUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.7s forwards; }
+.cta-logo {
+  width: 44px; height: auto; opacity: 0; filter: drop-shadow(0 0 20px rgba(37, 99, 235, 0.3));
+}
+.slide.active .cta-logo { animation: revealUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.85s forwards; }
+
+/* ── SCROLLABLE SLIDE CONTENT ── */
+.slide-inner.scrollable {
+  max-height: calc(100vh - 120px);
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(37, 99, 235, 0.2) transparent;
+  padding-right: 8px;
+}
+.slide-inner.scrollable::-webkit-scrollbar { width: 4px; }
+.slide-inner.scrollable::-webkit-scrollbar-track { background: transparent; }
+.slide-inner.scrollable::-webkit-scrollbar-thumb { background: rgba(37, 99, 235, 0.2); border-radius: 4px; }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 1024px) {
+  .slide { padding: 40px; }
+  .why-grid { grid-template-columns: repeat(2, 1fr); }
+  .timeline { flex-wrap: wrap; }
+  .timeline-item { flex: 0 0 33%; }
+  .pain-grid { grid-template-columns: 1fr; }
+  .results-grid { grid-template-columns: 1fr; }
+  .compliance-grid { grid-template-columns: 1fr; }
+  .ba-table { font-size: 12px; }
+  .why-scoreboard { gap: 24px; }
+}
+@media (max-width: 768px) {
+  .slide { padding: 24px; }
+  .why-grid { grid-template-columns: 1fr; }
+  .team-profiles { grid-template-columns: 1fr; }
+  .team-points { grid-template-columns: 1fr; }
+  .timeline-item { flex: 0 0 50%; }
+  .nav-arrows { bottom: 20px; }
+  .slide-counter { bottom: 20px; right: 20px; }
+  .cta-contacts { flex-direction: column; gap: 16px; }
+  .kb-hint { display: none; }
+  .ba-table td, .ba-table th { padding: 10px 12px; font-size: 12px; }
+}
+
+/* ── CURSOR GLOW ── */
+.cursor-glow {
+  position: fixed; width: 350px; height: 350px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(37, 99, 235, 0.08) 0%, transparent 70%);
+  pointer-events: none; z-index: 0;
+  transform: translate(-50%, -50%);
+  transition: opacity 0.4s;
+  opacity: 0;
+}
+.cursor-glow.visible { opacity: 1; }
+
+/* ── ANIMATED GRADIENT BORDERS ── */
+@property --angle {
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: false;
+}
+@keyframes rotateBorder { to { --angle: 360deg; } }
+
+.profile-card, .why-card, .result-card {
+  position: relative;
+  background: var(--bg-card) !important;
+  border: none !important;
+}
+.profile-card::before, .why-card::before, .result-card::before {
+  content: ''; position: absolute; inset: -1px; border-radius: inherit; padding: 1px;
+  background: conic-gradient(from var(--angle), transparent 40%, rgba(37, 99, 235, 0.4), rgba(139, 92, 246, 0.3), transparent 60%);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor; mask-composite: exclude;
+  animation: rotateBorder 6s linear infinite;
+  opacity: 0; transition: opacity 0.5s;
+}
+.profile-card:hover::before, .why-card:hover::before, .result-card:hover::before {
+  opacity: 1;
+}
+
+/* ── COVER TITLE SHIMMER ── */
+@keyframes shimmer {
+  0% { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+.slide.active .cover-title {
+  background: linear-gradient(90deg, var(--white) 0%, var(--white) 40%, var(--blue-300) 50%, var(--white) 60%, var(--white) 100%);
+  background-size: 200% auto;
+  -webkit-background-clip: text; background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: revealUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.5s forwards, shimmer 5s ease-in-out infinite 2s;
+}
+.cover-title span {
+  background: linear-gradient(135deg, var(--red-400), var(--amber-500)) !important;
+  -webkit-background-clip: text !important; background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+}
+
+/* ── STAT NUMBER COUNT-UP ── */
+@keyframes countPulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.06); }
+}
+.result-metric-value, .cost-value, .scoreboard-value {
+  animation: countPulse 3s ease-in-out infinite;
+  animation-play-state: paused;
+}
+.slide.active .result-metric-value, .slide.active .cost-value, .slide.active .scoreboard-value {
+  animation-play-state: running;
+}
+
+/* ── ENHANCED CARD HOVER LIFT ── */
+.pain-item, .cost-item, .compliance-item {
+  transition: border-color 0.3s, box-shadow 0.3s, transform 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+.pain-item:hover, .cost-item:hover, .compliance-item:hover {
+  transform: translateY(-2px) !important;
+}
+
+/* ── SLIDE LABEL GLOW ── */
+.slide-label {
+  text-shadow: 0 0 20px rgba(96, 165, 250, 0.4);
+}
+
+/* ── ENHANCED TIMELINE ── */
+.timeline-dot {
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+.timeline-item:hover .timeline-dot {
+  transform: scale(1.4);
+  box-shadow: 0 0 30px rgba(37, 99, 235, 0.7);
+}
+.timeline-item {
+  transition: transform 0.3s ease;
+}
+.timeline-item:hover {
+  transform: translateY(-4px);
+}
+
+/* ── COVER LOGO FLOAT ── */
+@keyframes logoFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+.cover-logo {
+  animation: logoReveal 1s cubic-bezier(0.16, 1, 0.3, 1) 0.1s forwards, logoFloat 4s ease-in-out 1.5s infinite !important;
+}
+
+/* ── CTA BUTTON PULSE ── */
+.cta-contacts {
+  position: relative;
+}
+.cta-contact-item {
+  padding: 10px 20px;
+  border: 1px solid rgba(37, 99, 235, 0.15);
+  border-radius: 12px;
+  background: rgba(37, 99, 235, 0.04);
+  transition: all 0.3s ease;
+}
+.cta-contact-item:hover {
+  border-color: rgba(37, 99, 235, 0.4);
+  background: rgba(37, 99, 235, 0.08);
+  box-shadow: 0 0 25px rgba(37, 99, 235, 0.2);
+  transform: translateY(-2px);
+}
+
+/* ── QUESTION HIGHLIGHT GLOW ── */
+.question-highlight {
+  position: relative;
+  overflow: hidden;
+}
+.question-highlight::after {
+  content: ''; position: absolute; top: 0; left: -100%; width: 60%; height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(239, 68, 68, 0.06), transparent);
+  animation: highlightSweep 4s ease-in-out infinite 2s;
+}
+@keyframes highlightSweep {
+  0% { left: -60%; }
+  100% { left: 160%; }
+}
+
+/* ── TRUST SIGNAL HOVER ── */
+.trust-signal {
+  transition: border-left-color 0.3s, transform 0.3s, box-shadow 0.3s;
+}
+.trust-signal:hover {
+  border-left-color: rgba(37, 99, 235, 0.5);
+  transform: translateX(4px);
+  box-shadow: -4px 0 20px rgba(37, 99, 235, 0.1);
+}
+
+/* ── BA TABLE ROW HOVER ── */
+.ba-row td {
+  transition: background 0.3s, transform 0.3s;
+}
+.ba-row:hover td:first-child {
+  background: rgba(239, 68, 68, 0.08);
+}
+.ba-row:hover td:last-child {
+  background: rgba(34, 197, 94, 0.08);
+}
+
+/* ── BIG STAT BANNER GLOW ── */
+@keyframes bannerGlow {
+  0%, 100% { box-shadow: 0 0 20px rgba(37, 99, 235, 0.05); }
+  50% { box-shadow: 0 0 40px rgba(37, 99, 235, 0.15); }
+}
+.big-stat-banner {
+  animation: bannerGlow 3s ease-in-out infinite;
+  animation-play-state: paused;
+}
+.slide.active .big-stat-banner { animation-play-state: running; }
+
+</style>
+</head>
+<body>
+
+<div class="cursor-glow" id="cursorGlow"></div>
+<div class="bg-grid"></div>
+<div class="bg-nebula">
+  <div class="nebula-orb"></div>
+  <div class="nebula-orb"></div>
+  <div class="nebula-orb"></div>
+</div>
+<div class="particles" id="particles"></div>
+
+<div class="progress-bar" id="progressBar"></div>
+
+<div class="slide-counter">
+  <span class="current" id="counterCurrent">01</span>
+  <span> / 10</span>
+</div>
+
+<div class="nav-arrows">
+  <button class="nav-btn" id="prevBtn" aria-label="Предишен слайд">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+  </button>
+  <button class="nav-btn" id="nextBtn" aria-label="Следващ слайд">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+  </button>
+</div>
+
+<div class="kb-hint"><kbd>&larr;</kbd> <kbd>&rarr;</kbd> за навигация</div>
+
+<div class="slides-container" id="slidesContainer">
+
+  <!-- ═══════ SLIDE 1 — COVER ═══════ -->
+  <div class="slide active" data-slide="0">
+    <div class="cover-glow-ring"></div>
+    <div class="cover-glow-ring"></div>
+    <div class="cover-glow-ring"></div>
+    <div class="slide-inner cover-content">
+      <img src="/Users/Zlatismac/Desktop/digitalisation program/blackwolf- materials/Logo.png" alt="BlackWolf" class="cover-logo">
+      <div class="cover-brand">BLACKWOLF</div>
+      <h1 class="cover-title">Вашият бизнес не работи в една система.<br>А може всичко да работи <span style="background:linear-gradient(135deg,var(--red-400),var(--amber-500));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">като един механизъм.</span></h1>
+      <div class="cover-trust-bar">
+        <div class="trust-bar-label">Работили сме с</div>
+        <div class="trust-bar-logos">
+          <span>NASA</span><span>Instagram</span><span>Uber Eats</span><span>Kingly</span><span>FBA Pro Academy</span><span>Favorit BG</span><span>Sales Capital</span><span>EA</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════ SLIDE 2 — БОЛКАТА ═══════ -->
+  <div class="slide" data-slide="1">
+    <div class="slide-inner scrollable">
+      <p class="slide-label reveal">Реалността</p>
+      <h2 class="slide-title reveal"><span class="accent-red">Познавате ли</span> това?</h2>
+      <div class="pain-grid">
+        <div>
+          <div class="pain-col-title pain-col-title--left">Ежедневният хаос</div>
+          <div class="pain-item">
+            <svg class="pain-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M15 9l-6 6M9 9l6 6"/></svg>
+            <span>Поръчките идват на имейл. Отиват в Excel. После в друг Excel. После някой звъни да пита "какво стана с поръчката".</span>
+          </div>
+          <div class="pain-item">
+            <svg class="pain-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M15 9l-6 6M9 9l6 6"/></svg>
+            <span>Складът работи с една система. Счетоводството — с друга. Продажбите — с трета. Никоя от тях не знае какво правят другите.</span>
+          </div>
+          <div class="pain-item">
+            <svg class="pain-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M15 9l-6 6M9 9l6 6"/></svg>
+            <span>Управителят прекарва 2 часа сутрин само за да разбере какво се е случило вчера.</span>
+          </div>
+          <div class="pain-item">
+            <svg class="pain-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M15 9l-6 6M9 9l6 6"/></svg>
+            <span>Когато нов служител дойде, му трябват 3 седмици да разбере "как се правят нещата тук" — защото процесите живеят в главите на хората.</span>
+          </div>
+          <div class="pain-item">
+            <svg class="pain-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M15 9l-6 6M9 9l6 6"/></svg>
+            <span>Грешки от ръчно въвеждане, загубени документи, дублирани данни — всеки ден.</span>
+          </div>
+        </div>
+        <div>
+          <div class="pain-col-title pain-col-title--right">Цената, която не виждате</div>
+          <div class="cost-item">
+            <div class="cost-value">&euro;8K – &euro;15K/мес.</div>
+            <div class="cost-desc">Заплати на хора, които правят работа, която система може да свърши автоматично</div>
+          </div>
+          <div class="cost-item">
+            <div class="cost-value">10-20% приходи</div>
+            <div class="cost-desc">Загубени сделки, защото никой не проследи клиента навреме</div>
+          </div>
+          <div class="cost-item">
+            <div class="cost-value">3-5 часа/ден</div>
+            <div class="cost-desc">Време на управителя за "гасене на пожари" вместо за растеж</div>
+          </div>
+          <div class="cost-item">
+            <div class="cost-value">&euro;50K – &euro;500K</div>
+            <div class="cost-desc">Един киберинцидент, без никаква защита</div>
+          </div>
+          <div class="cost-item">
+            <div class="cost-value">Неизмеримо</div>
+            <div class="cost-desc">Решения на интуиция вместо на данни</div>
+          </div>
+        </div>
+      </div>
+      <div class="trust-signal" style="animation-delay: 1.1s;">
+        "Когато влязохме в Kingly, заварихме точно тази картина — поръчки в Excel, 4 души само на ръчна обработка, нулева видимост. Познато?"
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════ SLIDE 3 — ВЪПРОСЪТ ═══════ -->
+  <div class="slide" data-slide="2">
+    <div class="slide-inner scrollable">
+      <p class="slide-label reveal">Въпросът</p>
+      <h2 class="slide-title reveal">Може ли <span class="accent">стандартен софтуер от кутията</span> да реши това?</h2>
+      <div class="question-body">
+        <p class="question-text">Всяко предприятие е различно. Различни продукти, различни процеси, различни хора, различни клиенти. Вашият начин на работа е уникален — формиран от години натрупан опит.</p>
+        <p class="question-text">Стандартно ERP от кутията покрива минималните функции. Но то не знае как работи вашият склад. Не знае, че при вас поръчките минават през 4 стъпки, а не през 2. Не знае, че вашите клиенти очакват потвърждение в рамките на час.</p>
+        <div class="question-highlight">Резултатът? Купувате система за &euro;18&nbsp;000 и продължавате да работите в Excel до нея, защото тя не пасва на реалността ви.</div>
+      </div>
+      <div class="trust-signal trust-signal--external" style="animation-delay: 1s;">
+        67% от ERP внедряванията не се използват пълноценно, защото не са проектирани за конкретния бизнес. <em style="color:rgba(139,92,246,0.5);">(Panorama Consulting, ERP Report)</em>
+      </div>
+      <div class="trust-signal" style="animation-delay: 1.15s;">
+        При FBA Pro Academy заварихме 5 отделни системи, които не си говореха. Стандартен софтуер нямаше да ги свърже — трябваше персонализирано решение.
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════ SLIDE 4 — РЕШЕНИЕТО ═══════ -->
+  <div class="slide" data-slide="3">
+    <div class="slide-inner scrollable">
+      <p class="slide-label reveal">Трансформацията</p>
+      <h2 class="slide-title reveal">Какво се случва, когато <span class="accent">всичко е свързано</span></h2>
+      <table class="ba-table">
+        <thead>
+          <tr class="ba-row" style="opacity:1;transform:none;">
+            <th>ПРЕДИ</th>
+            <th style="background:transparent;"></th>
+            <th>СЛЕД (с BlackWolf)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="ba-row">
+            <td>Поръчка идва на имейл &rarr; въвежда се ръчно &rarr; чака потвърждение</td>
+            <td class="ba-arrow">&rarr;</td>
+            <td>Поръчката влиза автоматично &rarr; тригерва производство &rarr; клиентът получава потвърждение</td>
+          </tr>
+          <tr class="ba-row">
+            <td>Складът не знае какво е продадено. Продажбите не знаят какво е на склад.</td>
+            <td class="ba-arrow">&rarr;</td>
+            <td>Една система: продажба &rarr; автоматично намаляване на склад &rarr; заявка при нисък запас</td>
+          </tr>
+          <tr class="ba-row">
+            <td>Управителят звъни на 5 души за да разбере "как вървим"</td>
+            <td class="ba-arrow">&rarr;</td>
+            <td>Dashboard в реално време: приходи, поръчки, склад, производство — на един екран</td>
+          </tr>
+          <tr class="ba-row">
+            <td>Нов клиент се записва в тетрадка</td>
+            <td class="ba-arrow">&rarr;</td>
+            <td>CRM проследява всеки контакт, разговор и оферта — автоматично</td>
+          </tr>
+          <tr class="ba-row">
+            <td>Фактура се прави ръчно в Word</td>
+            <td class="ba-arrow">&rarr;</td>
+            <td>Фактурата се генерира автоматично от поръчката</td>
+          </tr>
+          <tr class="ba-row">
+            <td>Данни в 5 различни Excel файла</td>
+            <td class="ba-arrow">&rarr;</td>
+            <td>Една база данни. Една истина. Достъпна за всички.</td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="trust-signal" style="animation-delay: 1.1s;">
+        Точно тази трансформация направихме за Kingly: от Excel и ръчна обработка &rarr; до автоматизирана система. Резултат: <strong style="color:var(--blue-400);">-73% време за обработка на поръчки.</strong>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════ SLIDE 5 — КОИ СМЕ НИЕ ═══════ -->
+  <div class="slide" data-slide="4">
+    <div class="slide-inner scrollable">
+      <div class="team-top">
+        <p class="slide-label reveal">Кои сме ние</p>
+        <h2 class="slide-title reveal">Екип с опит от <span class="accent">NASA, Instagram и Uber Eats.</span><br>Сега строим за бизнеси като вашия.</h2>
+        <div class="team-points">
+          <div class="team-point"><span class="team-point-dot"></span>Изградили сме персонализирани системи за компании с милиони потребители — от архитектура до deployment</div>
+          <div class="team-point"><span class="team-point-dot"></span>Специализирани в производствения сектор в Европа</div>
+          <div class="team-point"><span class="team-point-dot"></span>Офиси в Испания и България — работим на място, лице в лице</div>
+          <div class="team-point"><span class="team-point-dot"></span>Не продаваме лицензи. Влизаме в бизнеса ви, разбираме го и строим точно това, от което имате нужда.</div>
+        </div>
+      </div>
+      <div class="team-profiles">
+        <div class="profile-card">
+          <div class="profile-avatar" style="background:none;overflow:hidden;"><img src="/Users/Zlatismac/Downloads/ceo.webp" alt="AG" style="width:100%;height:100%;object-fit:cover;border-radius:50%;"></div>
+          <div class="profile-name">Alex Guti&eacute;rrez</div>
+          <div class="profile-role">CEO</div>
+          <div class="profile-creds">Master of BI &middot; &euro;3M+ генерирани приходи чрез неговите системи &middot; Exit на агенция с &euro;1M годишен оборот</div>
+        </div>
+        <div class="profile-card">
+          <div class="profile-avatar" style="background:none;overflow:hidden;"><img src="/Users/Zlatismac/Downloads/cto.webp" alt="AS" style="width:100%;height:100%;object-fit:cover;border-radius:50%;"></div>
+          <div class="profile-name">Alejandro Silvestre</div>
+          <div class="profile-role">CTO</div>
+          <div class="profile-creds">Cybersecurity & Systems Architecture</div>
+        </div>
+        <div class="profile-card">
+          <div class="profile-avatar" style="background:none;overflow:hidden;"><img src="/Users/Zlatismac/Downloads/bd.webp" alt="ЗВ" style="width:100%;height:100%;object-fit:cover;border-radius:50%;"></div>
+          <div class="profile-name">Златина Вълчева</div>
+          <div class="profile-role">HEAD OF BD</div>
+          <div class="profile-creds">Ex-Festo, Ex-Bitmovin &middot; Университети — Виена & Хонг Конг</div>
+        </div>
+      </div>
+      <div class="trust-bar" style="margin-top: 24px;">
+        <div class="trust-bar-logos">
+          <span>Kingly</span><span>FBA Pro Academy</span><span>Favorit BG</span><span>Sales Capital</span><span>studioOS</span><span>EA</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════ SLIDE 6 — ПРОЦЕС ═══════ -->
+  <div class="slide" data-slide="5">
+    <div class="slide-inner">
+      <p class="slide-label reveal">Нашият процес</p>
+      <h2 class="slide-title reveal">Първо разбираме бизнеса ви. <span class="accent">После строим.</span></h2>
+      <div class="timeline">
+        <div class="timeline-item">
+          <div class="timeline-week">Стъпка 1</div>
+          <div class="timeline-dot"></div>
+          <div class="timeline-title">Дълбок анализ</div>
+          <div class="timeline-desc">Идваме при вас. Говорим с хората. Наблюдаваме процесите. Разбираме как реално работите.</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-week">Стъпка 2</div>
+          <div class="timeline-dot"></div>
+          <div class="timeline-title">Персонална архитектура</div>
+          <div class="timeline-desc">Проектираме система по вашите процеси. Определяме къде AI замества ръчна работа.</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-week">Стъпка 3</div>
+          <div class="timeline-dot"></div>
+          <div class="timeline-title">Изграждане</div>
+          <div class="timeline-desc">Разработка и конфигурация — всяка функция, всеки workflow е по мярка.</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-week">Стъпка 4</div>
+          <div class="timeline-dot"></div>
+          <div class="timeline-title">Внедряване</div>
+          <div class="timeline-desc">Миграция на данни и обучение на екипа ви на място. Без manual на 200 страници.</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-week">Стъпка 5</div>
+          <div class="timeline-dot"></div>
+          <div class="timeline-title">Оптимизация</div>
+          <div class="timeline-desc">AI настройка и калибрация. Системата се подобрява с всеки ден.</div>
+        </div>
+      </div>
+      <div class="trust-signal" style="animation-delay: 1.2s;">
+        Този процес сме го изпълнили от А до Я за всеки наш клиент. При Kingly — от първата среща до работеща система за 5 седмици. При FBA Pro Academy — обединихме 5 системи в една за под 6 седмици.
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════ SLIDE 7 — ДОКАЗАНИ РЕЗУЛТАТИ ═══════ -->
+  <div class="slide" data-slide="6">
+    <div class="slide-inner scrollable">
+      <p class="slide-label reveal">Доказано</p>
+      <h2 class="slide-title reveal">Не обещаваме. <span class="accent">Показваме.</span></h2>
+      <div class="results-grid">
+        <div class="result-card">
+          <div class="result-card-title">KINGLY</div>
+          <div class="result-card-company">Текстилно производство, България</div>
+          <div class="result-before">Преди: поръчки в Excel, 4 души на ръчна обработка, постоянни грешки</div>
+          <div class="result-what">Какво направихме: персонализирана система с автоматизирани workflow-и, интегрирани с производствения график</div>
+          <div class="result-metrics">
+            <div class="result-metric">
+              <div class="result-metric-value">-73%</div>
+              <div class="result-metric-label">време за обработка</div>
+            </div>
+            <div class="result-metric">
+              <div class="result-metric-value">0</div>
+              <div class="result-metric-label">загубени клиенти</div>
+            </div>
+            <div class="result-metric">
+              <div class="result-metric-value">4</div>
+              <div class="result-metric-label">служители преразпределени</div>
+            </div>
+          </div>
+        </div>
+        <div class="result-card">
+          <div class="result-card-title">FBA PRO ACADEMY</div>
+          <div class="result-card-company">Образование и eCommerce</div>
+          <div class="result-before">Преди: 5 разпокъсани системи, ръчно въвеждане навсякъде, нулева видимост</div>
+          <div class="result-what">Какво направихме: единна платформа — продажби, обучение, плащания и анализи в едно</div>
+          <div class="result-metrics">
+            <div class="result-metric">
+              <div class="result-metric-value">&euro;500K+</div>
+              <div class="result-metric-label">приходи за 1 месец</div>
+            </div>
+            <div class="result-metric">
+              <div class="result-metric-value">100%</div>
+              <div class="result-metric-label">оперативна видимост</div>
+            </div>
+            <div class="result-metric">
+              <div class="result-metric-value">5&rarr;1</div>
+              <div class="result-metric-label">системи интегрирани</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="big-stat-banner">
+        <div class="big-stat-text">Средно подобрение при нашите клиенти: над <span class="accent">80% оперативна ефективност</span></div>
+      </div>
+      <div class="trust-bar" style="margin-top: 20px;">
+        <div class="trust-bar-label">Също сме работили с</div>
+        <div class="trust-bar-logos">
+          <span>Favorit BG</span><span>Sales Capital</span><span>Pedro Bauerbaum</span><span>studioOS</span><span>EA</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════ SLIDE 8 — ПРОГРАМАТА ═══════ -->
+  <div class="slide" data-slide="7">
+    <div class="slide-inner scrollable">
+      <p class="slide-label reveal">Програмата</p>
+      <h2 class="slide-title reveal">Покриваме всичко по BG16RFPR001-1.012.<br><span class="accent">Минимумът не е нашият стандарт.</span></h2>
+      <div class="compliance-grid">
+        <div class="compliance-item">
+          <div class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+          <span>Онлайн магазин</span>
+        </div>
+        <div class="compliance-item">
+          <div class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+          <span>ERP система</span>
+        </div>
+        <div class="compliance-item">
+          <div class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+          <span>CRM система</span>
+        </div>
+        <div class="compliance-item">
+          <div class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+          <span>BI система</span>
+        </div>
+        <div class="compliance-item">
+          <div class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+          <span>Киберсигурност</span>
+        </div>
+        <div class="compliance-item">
+          <div class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+          <span>Архивиране</span>
+        </div>
+        <div class="compliance-item">
+          <div class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+          <span>e-Learning платформа</span>
+        </div>
+        <div class="compliance-item">
+          <div class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+          <span>ISO 27001 сертификация</span>
+        </div>
+      </div>
+      <div class="compliance-footer">
+        Програмата покрива минималните функционалности. Ние <strong>надграждаме с персонализация, AI автоматизация и пълна интеграция</strong> — защото минимумът няма да промени начина, по който работите.
+      </div>
+      <div class="trust-signal" style="animation-delay: 1.1s;">
+        Познаваме програмата в детайл — изисквания, документация, отчетност. Поемаме целия процес, за да не се налага вие да се занимавате.
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════ SLIDE 9 — ЗАЩО BLACKWOLF ═══════ -->
+  <div class="slide" data-slide="8">
+    <div class="slide-inner scrollable">
+      <p class="slide-label reveal">Защо ние</p>
+      <h2 class="slide-title reveal">Не сме поредната IT фирма, която ще ви продаде<br>софтуер и <span class="accent">ще изчезне.</span></h2>
+      <div class="why-grid">
+        <div class="why-card">
+          <div class="why-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+          </div>
+          <div class="why-title">Персонализирано, не шаблонно</div>
+          <div class="why-desc">Влизаме в бизнеса ви, разбираме го и строим по мярка. Стандартното ERP е начална точка — не крайна.</div>
+        </div>
+        <div class="why-card">
+          <div class="why-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+          </div>
+          <div class="why-title">Всичко свързано в едно</div>
+          <div class="why-desc">Не 5 системи, които не си говорят. Една интегрирана система — от поръчка до доставка, от клиент до фактура.</div>
+        </div>
+        <div class="why-card">
+          <div class="why-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+          </div>
+          <div class="why-title">5 седмици, не 5 месеца</div>
+          <div class="why-desc">Докато другите правят оферти, при вас вече работи нова система.</div>
+        </div>
+        <div class="why-card">
+          <div class="why-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          </div>
+          <div class="why-title">Нулева бюрокрация</div>
+          <div class="why-desc">Оферти, документация, отчети, комуникация с УО — ние поемаме всичко.</div>
+        </div>
+      </div>
+      <div class="why-scoreboard">
+        <div class="scoreboard-item">
+          <div class="scoreboard-value">NASA &middot; Instagram &middot; Uber Eats</div>
+          <div class="scoreboard-label">опит на екипа</div>
+        </div>
+        <div class="scoreboard-item">
+          <div class="scoreboard-value">10+</div>
+          <div class="scoreboard-label">клиента</div>
+        </div>
+        <div class="scoreboard-item">
+          <div class="scoreboard-value">80%+</div>
+          <div class="scoreboard-label">средно подобрение</div>
+        </div>
+        <div class="scoreboard-item">
+          <div class="scoreboard-value">5 седмици</div>
+          <div class="scoreboard-label">до работеща система</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════ SLIDE 10 — CTA ═══════ -->
+  <div class="slide" data-slide="9">
+    <div class="cover-glow-ring"></div>
+    <div class="cover-glow-ring"></div>
+    <div class="cover-glow-ring"></div>
+    <div class="slide-inner cta-content">
+      <h2 class="cta-title">Какво наистина има нужда<br>вашият бизнес?</h2>
+      <p class="cta-sub">Не знаете? Точно затова съществуваме. Запазете безплатен 30-минутен разговор. Ще анализираме ситуацията ви и ще ви предложим персонално решение — не оферта от шаблон.</p>
+      <div class="cta-contacts">
+        <div class="cta-contact-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+          <span>web.blackwolfsec.io</span>
+        </div>
+      </div>
+      <p class="cta-tagline">BLACKWOLF &middot; Иновация, която защитава. Съвършенство, което дава сила.</p>
+      <img src="/Users/Zlatismac/Desktop/digitalisation program/blackwolf- materials/Logo.png" alt="BlackWolf" class="cta-logo">
+      <div class="cover-trust-bar" style="margin-top: 40px;">
+        <div class="trust-bar-label">Trusted by</div>
+        <div class="trust-bar-logos">
+          <span>NASA</span><span>Instagram</span><span>Uber Eats</span><span>Kingly</span><span>FBA Pro Academy</span><span>Favorit BG</span><span>Sales Capital</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+(function() {
+  'use strict';
+
+  // ── CURSOR GLOW ──
+  const cursorGlow = document.getElementById('cursorGlow');
+  let glowVisible = false;
+  document.addEventListener('mousemove', function(e) {
+    cursorGlow.style.left = e.clientX + 'px';
+    cursorGlow.style.top = e.clientY + 'px';
+    if (!glowVisible) { cursorGlow.classList.add('visible'); glowVisible = true; }
+  });
+  document.addEventListener('mouseleave', function() {
+    cursorGlow.classList.remove('visible'); glowVisible = false;
+  });
+
+  // ── PARTICLES ──
+  const particleContainer = document.getElementById('particles');
+  for (let i = 0; i < 30; i++) {
+    const p = document.createElement('div');
+    p.className = 'particle';
+    p.style.left = Math.random() * 100 + '%';
+    p.style.animationDuration = (12 + Math.random() * 20) + 's';
+    p.style.animationDelay = (Math.random() * 15) + 's';
+    p.style.width = p.style.height = (1 + Math.random() * 2) + 'px';
+    particleContainer.appendChild(p);
+  }
+
+  // ── SLIDE ENGINE ──
+  const TOTAL = 10;
+  let current = 0;
+  let isTransitioning = false;
+
+  const container = document.getElementById('slidesContainer');
+  const slides = container.querySelectorAll('.slide');
+  const progressBar = document.getElementById('progressBar');
+  const counterCurrent = document.getElementById('counterCurrent');
+  const prevBtn = document.getElementById('prevBtn');
+  const nextBtn = document.getElementById('nextBtn');
+
+  function updateProgress() {
+    const pct = ((current + 1) / TOTAL) * 100;
+    progressBar.style.width = pct + '%';
+    counterCurrent.textContent = String(current + 1).padStart(2, '0');
+  }
+
+  // Selectors for animated elements
+  const ANIMATED_SELECTORS = '.reveal, .pain-item, .cost-item, .stat-card, .profile-card, .pillar-card, .timeline-item, .result-card, .compliance-item, .compliance-footer, .big-stat-banner, .why-card, .why-scoreboard, .trust-signal, .trust-bar, .cover-trust-bar, .ba-row, .question-text, .question-highlight';
+
+  function goTo(index) {
+    if (index < 0 || index >= TOTAL || index === current || isTransitioning) return;
+    isTransitioning = true;
+
+    const prev = slides[current];
+    const next = slides[index];
+    const goingDown = index > current;
+
+    prev.classList.remove('active');
+    prev.style.transform = goingDown ? 'translateY(-30px)' : 'translateY(30px)';
+    prev.style.opacity = '0';
+
+    // Scroll back to top for scrollable slides
+    const scrollInner = next.querySelector('.scrollable');
+    if (scrollInner) scrollInner.scrollTop = 0;
+
+    next.style.transform = goingDown ? 'translateY(30px)' : 'translateY(-30px)';
+    next.style.opacity = '0';
+    next.style.visibility = 'visible';
+
+    void next.offsetWidth;
+
+    // Reset animations
+    next.querySelectorAll(ANIMATED_SELECTORS).forEach(el => {
+      el.style.animation = 'none';
+      el.style.opacity = '0';
+      void el.offsetWidth;
+      el.style.animation = '';
+    });
+
+    requestAnimationFrame(() => {
+      next.classList.add('active');
+      next.style.transform = '';
+      next.style.opacity = '';
+      current = index;
+      updateProgress();
+
+      setTimeout(() => {
+        prev.style.visibility = 'hidden';
+        prev.style.transform = '';
+        prev.style.opacity = '';
+        prev.classList.remove('exit-up');
+        isTransitioning = false;
+      }, 700);
+    });
+  }
+
+  function goNext() { goTo(current + 1); }
+  function goPrev() { goTo(current - 1); }
+
+  // Keyboard
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === ' ') { e.preventDefault(); goNext(); }
+    else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') { e.preventDefault(); goPrev(); }
+  });
+
+  // Buttons
+  prevBtn.addEventListener('click', goPrev);
+  nextBtn.addEventListener('click', goNext);
+
+  // Touch
+  let touchStartY = 0, touchStartX = 0;
+  document.addEventListener('touchstart', function(e) {
+    touchStartY = e.changedTouches[0].screenY;
+    touchStartX = e.changedTouches[0].screenX;
+  }, { passive: true });
+
+  document.addEventListener('touchend', function(e) {
+    const dy = e.changedTouches[0].screenY - touchStartY;
+    const dx = e.changedTouches[0].screenX - touchStartX;
+    if (Math.max(Math.abs(dx), Math.abs(dy)) < 40) return;
+    if (Math.abs(dx) > Math.abs(dy)) { dx < 0 ? goNext() : goPrev(); }
+    else { dy < 0 ? goNext() : goPrev(); }
+  }, { passive: true });
+
+  // Wheel
+  let wheelTimeout = false;
+  document.addEventListener('wheel', function(e) {
+    // Don't navigate if scrolling inside a scrollable slide
+    const scrollable = slides[current].querySelector('.scrollable');
+    if (scrollable) {
+      const { scrollTop, scrollHeight, clientHeight } = scrollable;
+      const atTop = scrollTop <= 0;
+      const atBottom = scrollTop + clientHeight >= scrollHeight - 5;
+      if (e.deltaY > 0 && !atBottom) return;
+      if (e.deltaY < 0 && !atTop) return;
+    }
+    if (wheelTimeout) return;
+    wheelTimeout = true;
+    if (e.deltaY > 30) goNext();
+    else if (e.deltaY < -30) goPrev();
+    setTimeout(() => { wheelTimeout = false; }, 800);
+  }, { passive: true });
+
+  // Initial
+  updateProgress();
+})();
+</script>
+</body>
+</html>
