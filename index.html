@@ -597,6 +597,10 @@ html, body {
   .why-scoreboard { gap: 24px; }
 }
 @media (max-width: 768px) {
+  .timeline { flex-direction: column !important; gap: 16px !important; padding-left: 20px !important; flex-wrap: nowrap !important; }
+  .timeline-item { flex: none !important; text-align: left !important; padding: 0 0 0 20px !important; }
+  .timeline-dot { margin: 0 0 8px 0 !important; }
+  .timeline::before { display: none !important; }
   .slide { padding: 24px; }
   .why-grid { grid-template-columns: 1fr; }
   .team-profiles { grid-template-columns: 1fr; }
