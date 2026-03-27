@@ -597,6 +597,13 @@ html, body {
   .why-scoreboard { gap: 24px; }
 }
 @media (max-width: 768px) {
+  .timeline { flex-direction: column !important; gap: 16px !important; padding-left: 30px !important; flex-wrap: nowrap !important; }
+  .timeline::before { display: none !important; }
+  .timeline-item { flex: none !important; text-align: left !important; padding: 0 0 0 20px !important; position: relative !important; border-left: 2px solid rgba(37,99,235,0.3); }
+  .timeline-dot { position: absolute !important; left: -8px !important; top: 2px !important; margin: 0 !important; width: 12px !important; height: 12px !important; }
+  .timeline-week { font-size: 10px !important; }
+  .timeline-title { font-size: 13px !important; }
+  .timeline-desc { font-size: 11px !important; }
   .timeline { flex-direction: column !important; gap: 16px !important; padding-left: 20px !important; flex-wrap: nowrap !important; }
   .timeline-item { flex: none !important; text-align: left !important; padding: 0 0 0 20px !important; }
   .timeline-dot { margin: 0 0 8px 0 !important; }
