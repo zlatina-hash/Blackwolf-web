@@ -1349,7 +1349,7 @@ html, body {
     touchStartX = e.changedTouches[0].screenX;
   }, { passive: true });
 
-  document.addEventListener('touchend', function(e) {
+  document.addEventListener('touchend_disabled', function(e) {
     const dy = e.changedTouches[0].screenY - touchStartY;
     const dx = e.changedTouches[0].screenX - touchStartX;
     if (Math.max(Math.abs(dx), Math.abs(dy)) < 100) return;
